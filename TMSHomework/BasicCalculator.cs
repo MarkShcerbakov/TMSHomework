@@ -31,7 +31,7 @@ namespace TMSHomework
 
         public double Percent() => NumA / 100 * NumB;
 
-        public double Pow() => Math.Pow(NumA, NumB);
+        public double Pow() => NumA < 0 && NumB == 0.5 ? throw new ArithmeticException("Корень из отрицательного числа!") : Math.Pow(NumA, NumB);
 
         public double Compute() => Operation switch
         {
