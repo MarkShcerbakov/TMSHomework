@@ -27,10 +27,6 @@ namespace TMSHomework
                 {
                     var idx = Array.FindIndex(rpn.ToArray(), Operators.Contains);
                     var tmp = Calculate(rpn[idx - 2], rpn[idx - 1], rpn[idx]);
-                    if (double.IsInfinity(tmp))
-                    {
-                        return "Введено некорректное выражение!";
-                    }
                     rpn[idx - 2] = $"{tmp}";
                     rpn.RemoveAt(idx);
                     rpn.RemoveAt(idx - 1);
@@ -139,8 +135,8 @@ namespace TMSHomework
             "+" => double.Parse(a) + double.Parse(b),
             "-" => double.Parse(a) - double.Parse(b),
             "*" => double.Parse(a) * double.Parse(b),
-            "/" => double.Parse(a) / double.Parse(b), // Деление на 0!
-            "^" => Math.Pow(double.Parse(a), double.Parse(b)),
+            "/" => b == "0" ? throw new DivideByZeroException("Деление на ноль!") : double.Parse(a) / double.Parse(b), // Деление на 0!
+            "^" => a[0] == '-' && b == "0,5" ? throw new ArithmeticException("Корень из отрицательного числа!") : Math.Pow(double.Parse(a), double.Parse(b)),
             "%" => double.Parse(a) % double.Parse(b),
             _ => throw new ArithmeticException()
         };
