@@ -1,40 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace TMSHomework
 {
     internal class BasicCalculator
     {
-        public int NumA;
-        public int NumB;
-        public char Operation;
+        public double NumA;
+        public double NumB;
+        public string Operation;
 
-        public BasicCalculator(int numA, int numB, char operation)
+        public BasicCalculator(double numA, double numB, string operation)
         {
             NumA = numA;
             NumB = numB;
             Operation = operation;
         }
 
-        public int Addition() => NumA + NumB;
+        public double Addition() => NumA + NumB;
 
-        public int Substraction() => NumA - NumB;
+        public double Substraction() => NumA - NumB;
 
-        public int Multiplication() => NumA * NumB;
+        public double Multiplication() => NumA * NumB;
 
-        public int Division() => NumA / NumB; // Проверить деление на ноль!!!
+        public double Division() => NumB == 0 ? throw new DivideByZeroException("Деление на ноль!") : NumA / NumB;
 
-        public int Mod() => NumA % NumB;
+        public double Percent() => NumA / 100 * NumB;
 
-        public int Pow() => (int)Math.Pow(NumA, NumB);
+        public double Pow() => Math.Pow(NumA, NumB);
 
-        public int Compute()
+        public double Compute() => Operation switch
         {
-
-            return 0;
-        }
+            "+" => Addition(),
+            "-" => Substraction(),
+            "*" => Multiplication(),
+            "/" => Division(),
+            "^" => Pow(),
+            "%" => Percent(),
+            _ => throw new ArithmeticException()
+        };
     }
 }
