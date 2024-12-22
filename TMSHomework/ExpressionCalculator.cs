@@ -14,7 +14,7 @@ namespace TMSHomework
         public static string Compute(string expression)
         {
             expression = Regex.Replace(expression, @"\s", "");
-            if (BracersValidator(string.Concat(expression.Where("()".Contains))))
+            if (BracersValidator(Regex.Replace(expression, @"[^\(\)]", "")))
             {
                 return "Некорректное выражение!";
             }
@@ -22,7 +22,7 @@ namespace TMSHomework
             {
                 return expression;
             }
-            if (Regex.IsMatch(expression, @"\(.+?\)"))
+            if (Regex.IsMatch(expression, @"\([^\(\)]+?\)"))
             {
                 return Compute(UpdateExpressionInBracers(expression));
             }
@@ -42,7 +42,7 @@ namespace TMSHomework
 
         private static string UpdateExpressionInBracers(string expression)
         {
-            var match = Regex.Match(expression, @"\(.+?\)");
+            var match = Regex.Match(expression, @"\([^\(\)]+?\)");
             var calc = Compute(match.Value[1..^1]);
             var updateExpression = expression.Replace(match.Value, $"{calc}"); ;
             return updateExpression;
