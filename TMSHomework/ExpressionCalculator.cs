@@ -18,11 +18,11 @@ namespace TMSHomework
             {
                 return "Некорректное выражение!";
             }
-            if (expression.All(char.IsNumber))
+            if (double.TryParse(expression, out double _))
             {
                 return expression;
             }
-            if (Regex.IsMatch(expression, @"\(.+\)"))
+            if (Regex.IsMatch(expression, @"\(.+?\)"))
             {
                 return Compute(UpdateExpressionInBracers(expression));
             }
@@ -34,15 +34,15 @@ namespace TMSHomework
 
         private static string UpdateExpression(string expression)
         {
-            var match = _operatorsPriority.Select(op => Regex.Match(expression, $@"(\d+)(\{op})(\d+)")).First(m => m.Success);
-            var calc = Calculate(match.Groups[1].Value, match.Groups[3].Value, match.Groups[2].Value);
+            var match = _operatorsPriority.Select(op => Regex.Match(expression, $@"(?<=[\+\-\*\/\^\%\(]|\A)((-?)(\d?\,?\d+))(\{op})((-?)(\d?\,?\d+))")).First(m => m.Success);
+            var calc = Calculate(match.Groups[1].Value, match.Groups[5].Value, match.Groups[4].Value);
             var updateExpression = expression.Replace(match.Value, $"{calc}");
             return updateExpression;
         }
 
         private static string UpdateExpressionInBracers(string expression)
         {
-            var match = Regex.Match(expression, @"\(.+\)");
+            var match = Regex.Match(expression, @"\(.+?\)");
             var calc = Compute(match.Value[1..^1]);
             var updateExpression = expression.Replace(match.Value, $"{calc}"); ;
             return updateExpression;
