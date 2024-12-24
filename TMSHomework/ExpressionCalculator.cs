@@ -44,7 +44,7 @@ namespace TMSHomework
         {
             var match = Regex.Match(expression, @"\([^\(\)]+?\)");
             var calc = Compute(match.Value[1..^1]);
-            var updateExpression = expression.Replace(match.Value, $"{calc}"); ;
+            var updateExpression = expression.Replace(match.Value, $"{calc}");
             return updateExpression;
         }
 
