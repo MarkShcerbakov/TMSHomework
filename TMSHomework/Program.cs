@@ -13,6 +13,33 @@ namespace TMSHomework
             Console.WriteLine("3. Инверсия элементов (построчно/во всей матрице)");
             Console.WriteLine("4. Бонус*** Нахождение определителя матрицы (только для квадратных матриц)");
 
+            var mainMenu = new Dictionary<int, Func<int[][], Array>>()
+            {
+                [1] = MatrixOperations.NumberOfPositiveElements,
+                [2] = MatrixOperations.NumberOfNegativeElements,
+                [3] = MatrixOperations.SortRowsOfMatrix,
+                [4] = MatrixOperations.SortRowsOfMatrixDecending,
+                [5] = MatrixOperations.SortMatrix,
+                [6] = MatrixOperations.SortMatrixDescending,
+                [7] = MatrixOperations.InverseRowsOfMatrix,
+                [8] = MatrixOperations.InverseMatrix,
+                [9] = MatrixOperations.MatrixDeterminant
+            };
+
+            var mainMenuComments = new Dictionary<int, string>()
+            {
+                [1] = "\nПоложительные элементы в матрице:",
+                [2] = "\nОтрицательные элементы в матрице:",
+                [3] = "\nОтсортированные по возрастанию строки матрицы:",
+                [4] = "\nОтсортированные по убыванию строки матрицы:",
+                [5] = "\nОтсортированная по возрастанию матрица:",
+                [6] = "\nОтсортированная по убыванию матрица:",
+                [7] = "\nИнверсия строк матрицы:",
+                [8] = "\nИнверсия матрицы:",
+                [9] = "\nОпределитель матрицы:",
+            };
+
+
             int rows, cols, maxRows = 10, maxCols = 10;
             int[][] matrix;
             Console.WriteLine("\nВведите кол-во строк в матрице (не более 10):");
@@ -68,7 +95,7 @@ namespace TMSHomework
             while (true)
             {
                 int choice;
-                while (!int.TryParse(Console.ReadLine(), out choice))
+                while (!int.TryParse(Console.ReadLine(), out choice) || choice > mainMenu.Keys.Max() || choice < 0)
                 {
                     Console.WriteLine("Сделайте корректый выбор!");
                 }
@@ -78,69 +105,10 @@ namespace TMSHomework
                     break;
                 }
 
-                switch (choice)
-                {
-                    case 1:
-                        var choiceOne = MatrixOperations.NumberOfPositiveElements(matrix);
-                        Console.WriteLine($"\nВ матрице всего {choiceOne.Length} положительных элементов: {string.Join(",", choiceOne)}");
-                        Console.WriteLine("Выберити следующие действия над матрицей:");
-                        break;
-                    case 2:
-                        var choiceTwo = MatrixOperations.NumberOfNegativeElements(matrix);
-                        Console.WriteLine($"\nВ матрице всего {choiceTwo.Length} отрицательных элементов: {string.Join(",", choiceTwo)}");
-                        Console.WriteLine("Выберити следующие действия над матрицей:");
-                        break;
-                    case 3:
-                        var choiceThree = MatrixOperations.SortRowsOfMatrix(matrix);
-                        Console.WriteLine($"\nОтсортированные по возрастанию строки матрицы:");
-                        MatrixOperations.MatrixDisplay(choiceThree);
-                        Console.WriteLine("Выберити следующие действия над матрицей:");
-                        break;
-                    case 4:
-                        var choiceFour = MatrixOperations.SortRowsOfMatrixDecending(matrix);
-                        Console.WriteLine($"\nОтсортированные по убыванию строки матрицы:");
-                        MatrixOperations.MatrixDisplay(choiceFour);
-                        Console.WriteLine("Выберити следующие действия над матрицей:");
-                        break;
-                    case 5:
-                        var choiceFive = MatrixOperations.SortMatrix(matrix);
-                        Console.WriteLine($"\nОтсортированная по возрастанию матрица:");
-                        MatrixOperations.MatrixDisplay(choiceFive);
-                        Console.WriteLine("Выберити следующие действия над матрицей:");
-                        break;
-                    case 6:
-                        var choiceSix = MatrixOperations.SortMatrixDescending(matrix);
-                        Console.WriteLine($"\nОтсортированная по убыванию матрица:");
-                        MatrixOperations.MatrixDisplay(choiceSix);
-                        Console.WriteLine("Выберити следующие действия над матрицей:");
-                        break;
-                    case 7:
-                        var choiceSeven = MatrixOperations.InverseRowsOfMatrix(matrix);
-                        Console.WriteLine($"\nИнверсия строк матрицы:");
-                        MatrixOperations.MatrixDisplay(choiceSeven);
-                        Console.WriteLine("Выберити следующие действия над матрицей:");
-                        break;
-                    case 8:
-                        var choiceEight = MatrixOperations.InverseMatrix(matrix);
-                        Console.WriteLine($"\nИнверсия строк матрицы:");
-                        MatrixOperations.MatrixDisplay(choiceEight);
-                        Console.WriteLine("Выберити следующие действия над матрицей:");
-                        break;
-                    case 9:
-                        if (matrix.Length != matrix[0].Length)
-                        {
-                            Console.WriteLine("Невозможно рассчитать определитель матрицы!");
-                            break;
-                        }
-                        var choiceNine = MatrixOperations.MatrixDeterminant(matrix);
-                        Console.WriteLine($"\nОпределитель матрицы:");
-                        Console.WriteLine(choiceNine);
-                        Console.WriteLine("Выберити следующие действия над матрицей:");
-                        break;
-                    default:
-                        Console.WriteLine("Введите корректное значение!");
-                        break;
-                }
+                // Нужно добавить проверку наличия в словаре конкретного элемента
+                Console.WriteLine(mainMenuComments[choice]);
+                MatrixOperations.MatrixDisplay(mainMenu[choice](matrix));
+                Console.WriteLine();
             }
 
             Console.ReadKey();

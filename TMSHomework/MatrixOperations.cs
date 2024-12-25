@@ -24,38 +24,48 @@ namespace TMSHomework
 
         public static int[][] InverseMatrix(int[][] arr) => arr.SelectMany(x => x).Reverse().Chunk(arr[0].Length).ToArray();
 
-        public static long MatrixDeterminant(int[][] matrix)
+        public static long[] MatrixDeterminant(int[][] matrix)
         {
             if (matrix.Length < 2)
             {
-                return matrix[0][0];
+                return new long[] { matrix[0][0] };
             }
             if (matrix.Length == 2)
             {
-                return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+                return new long[] { matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0] };
             }
 
             long det = 0;
             for (int j = 0; j < matrix.Length; j++)
             {
                 var smallMatrix = matrix[1..].Select(x => x.Where((_, i) => i != j).ToArray()).ToArray();
-                det += matrix[0][j] * MatrixDeterminant(smallMatrix) * (j % 2 == 0 ? 1 : -1);
+                det += matrix[0][j] * MatrixDeterminant(smallMatrix)[0] * (j % 2 == 0 ? 1 : -1);
             }
 
-            return det;
+            return new long[] { det };
         }
 
-        public static void MatrixDisplay(int[][] arr)
+        public static void MatrixDisplay(Array arr)
         {
-            var rows = arr.Length;
-            var cols = arr[0].Length;
-            for (int row = 0; row < rows; row++)
+            if (arr.Length == 0)
             {
-                for (int col = 0; col < cols; col++)
+                Console.WriteLine("0");
+                return;
+            }
+            if (arr.GetValue(0) is not Array)
+            {
+                foreach (var row in arr)
                 {
-                    Console.Write($"{arr[row][col],5:d}");
+                    Console.Write($"{row,5:d}");
                 }
-                Console.WriteLine();
+            }
+            else
+            {
+                foreach (var row in arr)
+                {
+                    MatrixDisplay((Array)row);
+                    Console.WriteLine();
+                }
             }
         }
     }
