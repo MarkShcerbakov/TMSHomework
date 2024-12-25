@@ -52,7 +52,7 @@ namespace TMSHomework
             }
 
             Console.WriteLine("\nВы ввели следующую матрицу:");
-            Console.WriteLine(string.Concat(matrix.Select(row => string.Join(" ", row) + "\n")));
+            MatrixOperations.MatrixDisplay(matrix);
             Console.WriteLine("Выберити следующие действия над матрицей:");
             Console.WriteLine("0. Закончить работу с приложением");
             Console.WriteLine("1. Найти кол-во положительных элементов");
