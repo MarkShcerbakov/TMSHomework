@@ -6,7 +6,8 @@ namespace TMSHomework
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Console.WriteLine("TMS Lesson4-Task1-ULearn.me");
+            Console.WriteLine("В данном проекте находятся решения заданий из раздела массивы платформы ULearn.me");
             //Console.WriteLine(GetSuit(Suits.Cups));
             //Console.WriteLine(CheckFirstElement(null));
             //Console.WriteLine(CheckFirstElement(new int[0]));
