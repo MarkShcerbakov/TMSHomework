@@ -1,6 +1,4 @@
-﻿using System.Data;
-
-namespace TMSHomework
+﻿namespace TMSHomework
 {
     internal class Program
     {
@@ -95,7 +93,7 @@ namespace TMSHomework
             while (true)
             {
                 int choice;
-                while (!int.TryParse(Console.ReadLine(), out choice) || choice > mainMenu.Keys.Max() || choice < 0)
+                while (!int.TryParse(Console.ReadLine(), out choice))
                 {
                     Console.WriteLine("Сделайте корректый выбор!");
                 }
@@ -105,10 +103,17 @@ namespace TMSHomework
                     break;
                 }
 
-                // Нужно добавить проверку наличия в словаре конкретного элемента
-                Console.WriteLine(mainMenuComments[choice]);
-                MatrixOperations.MatrixDisplay(mainMenu[choice](matrix));
-                Console.WriteLine();
+                if (!mainMenu.TryGetValue(choice, out Func<int[][], Array> operationDelegate))
+                {
+                    Console.WriteLine("Сделайте корректый выбор!");
+                    continue;
+                }
+                else
+                {
+                    Console.WriteLine(mainMenuComments[choice]);
+                    MatrixOperations.MatrixDisplay(operationDelegate(matrix));
+                    Console.WriteLine();
+                }
             }
 
             Console.ReadKey();

@@ -49,7 +49,7 @@ namespace TMSHomework
         {
             if (arr.Length == 0)
             {
-                Console.WriteLine("0");
+                Console.WriteLine("-");
                 return;
             }
             if (arr.GetValue(0) is not Array)
