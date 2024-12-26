@@ -4,6 +4,7 @@
     {
         static void Main(string[] args)
         {
+            // Описание приложенияя
             Console.WriteLine("TMS Lesson4-Task2-MatrixOperations");
             Console.WriteLine("Приложение позволяет осуществить следующие операции над матрицами:");
             Console.WriteLine("1. Найти кол-во положительных (отрицательных) элементов");
@@ -11,6 +12,7 @@
             Console.WriteLine("3. Инверсия элементов (построчно/во всей матрице)");
             Console.WriteLine("4. Бонус*** Нахождение определителя матрицы (только для квадратных матриц)");
 
+            // Считываем кол-во строк и столбоц матрицы
             int rows, cols, maxRows = 10, maxCols = 10;
             int[][] matrix;
             Console.WriteLine($"\nВведите кол-во строк в матрице (не более {maxRows}):");
@@ -25,6 +27,7 @@
                 Console.WriteLine("Введите корректное значение!");
             }
 
+            // Заполняем матрицу значениями
             var strMatrix = new List<string>();
             Console.WriteLine($"\nВведите построчно через пробел элементы матрицы {rows} x {cols}:");
             while (true)
@@ -46,10 +49,12 @@
                 }
             }
 
+            // Отоброжаем меню работы с матрицой
             Console.WriteLine("\nВы ввели следующую матрицу:");
             MatrixOperations.MatrixDisplay(matrix);
             MainMenu.ShowMenu();
 
+            // Выбираем опции по работе с матрицей 
             while (true)
             {
                 int choice;
