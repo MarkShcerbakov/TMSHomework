@@ -8,6 +8,21 @@ namespace TMSHomework
 {
     internal class MatrixOperations
     {
+        private static Dictionary<int, Func<int[][], Array>> _operations = new()
+        {
+            [1] = NumberOfPositiveElements,
+            [2] = NumberOfNegativeElements,
+            [3] = SortRowsOfMatrix,
+            [4] = SortRowsOfMatrixDecending,
+            [5] = SortMatrix,
+            [6] = SortMatrixDescending,
+            [7] = InverseRowsOfMatrix,
+            [8] = InverseMatrix,
+            [9] = MatrixDeterminant
+        };
+
+        public static Func<int[][], Array> GetOperator(int choice) => _operations.TryGetValue(choice, out Func<int[][], Array> operation) ? operation : null;
+
         public static int[] NumberOfPositiveElements(int[][] arr) => arr.SelectMany(x => x).Where(x => x >= 0).ToArray();
 
         public static int[] NumberOfNegativeElements(int[][] arr) => arr.SelectMany(x => x).Where(x => x < 0).ToArray();
@@ -26,6 +41,10 @@ namespace TMSHomework
 
         public static long[] MatrixDeterminant(int[][] matrix)
         {
+            if (matrix.Length != matrix[0].Length)
+            {
+                return new long[0];
+            }
             if (matrix.Length < 2)
             {
                 return new long[] { matrix[0][0] };
