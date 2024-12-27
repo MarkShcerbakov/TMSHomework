@@ -12,6 +12,7 @@
             if (File.Exists("test.txt"))
             {
                 inputText = File.ReadAllText("test.txt");
+                var textParser = new TextParser(inputText);
             }
             else
             {
@@ -19,7 +20,7 @@
             }
             foreach (var item in inputText)
             {
-                Console.WriteLine(item);
+                Console.Write(item);
             }
 
 
