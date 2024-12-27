@@ -8,21 +8,25 @@ namespace TMSHomework
 {
     internal class Game
     {
-        private static char _playerChar = 'P';
-        private static char _treasureChar = 'T';
-        private static char _emptyPlaceChar = '.';
-        private static char _wallChar = '@';
-        private static char _barrierChar = '#';
-        private static int _startBarrierCount = 5;
-        private static int _startTreasureCount = 5;
-        private static int _startPlayerCount = 1;
-        private static int _stepToAddItems = 5;
+        public readonly char PlayerChar = 'P';
+        public readonly char TreasureChar = 'T';
+        public readonly char EmptyPlaceChar = '.';
+        public readonly char WallChar = '@';
+        public readonly char BarrierChar = '#';
+        public readonly int StartBarrierCount = 5;
+        public readonly int StartTreasureCount = 5;
+        public readonly int StartPlayerCount = 1;
+        public readonly int StepToAddItems = 5;
         public int Rows;
         public int Cols;
         public char[][] Field;
         public Dictionary<ConsoleKey, Func<bool>> PlayersMoves;
         public Player Player;
         public int MoveCounter;
+        public bool IsGameContinue;
+        public bool IsWin;
+        public readonly int MinItemAdd = 1;
+        public readonly int MaxItemAdd = 3;
 
         public Game(int rows, int cols)
         {
@@ -38,21 +42,22 @@ namespace TMSHomework
                 [ConsoleKey.D] = MovePlayerRight,
             };
             MoveCounter = 0;
+            IsGameContinue = true;
+            IsWin = false;
         }
 
         public char[][] GenerateField()
         {
             // Генерируем пустой массив Rows x Cols
-            var field = new char[(Rows + 2) * (Cols + 2)].Select(ch => _emptyPlaceChar).Chunk(Cols + 2).ToArray();
+            var field = new char[(Rows + 2) * (Cols + 2)].Select(ch => EmptyPlaceChar).Chunk(Cols + 2).ToArray();
 
             // Окружаем игровое поле стенами @
-            field = field.Select((ch, i) => i == 0 || i == Rows + 1 ? ch.Select(c => _wallChar).ToArray()
-                                                                    : ch.Select((c, j) => j == 0 || j == Cols + 1 ? _wallChar : c).ToArray()).ToArray();
-
+            field = field.Select((ch, i) => i == 0 || i == Rows + 1 ? ch.Select(c => WallChar).ToArray()
+                                                                    : ch.Select((c, j) => j == 0 || j == Cols + 1 ? WallChar : c).ToArray()).ToArray();
             // Размещаем объекты на игровом поле
-            AddObjectsOnGameField(_startBarrierCount, _barrierChar, field);
-            AddObjectsOnGameField(_startTreasureCount, _treasureChar, field);
-            AddObjectsOnGameField(_startPlayerCount, _playerChar, field);
+            AddObjectsOnGameField(StartBarrierCount, BarrierChar, field);
+            AddObjectsOnGameField(StartTreasureCount, TreasureChar, field);
+            AddObjectsOnGameField(StartPlayerCount, PlayerChar, field);
 
             return field;
         }
@@ -64,7 +69,7 @@ namespace TMSHomework
             {
                 var itemXPos = new Random().Next(1, Rows + 1);
                 var itemYPos = new Random().Next(1, Cols + 1);
-                if (field[itemXPos][itemYPos] == _emptyPlaceChar)
+                if (field[itemXPos][itemYPos] == EmptyPlaceChar)
                 {
                     field[itemXPos][itemYPos] = item;
                     counter++;
@@ -78,7 +83,7 @@ namespace TMSHomework
 
         private Player GetStartPlayerPosition()
         {
-            var playersPos = Array.IndexOf(Field.SelectMany(ch => ch).ToArray(), _playerChar);
+            var playersPos = Array.IndexOf(Field.SelectMany(ch => ch).ToArray(), PlayerChar);
             var yPos = playersPos / (Cols + 2);
             var xPos = playersPos % (Cols + 2);
             return new Player(yPos, xPos);
@@ -89,11 +94,10 @@ namespace TMSHomework
             if (isMove)
             {
                 MoveCounter++;
-                DrawField();
                 if (IsEndGame())
                 {
-                    Console.SetCursorPosition(0, Rows + 4);
-                    Console.WriteLine("Поздравляю, вы собрали все сокровища!");
+                    IsWin = true;
+                    IsGameContinue = false;
                     return;
                 }
                 else
@@ -105,17 +109,17 @@ namespace TMSHomework
 
         private bool MovePlayerUp()
         {
-            if (Player.PosY > 1 && !$"{_barrierChar}{_wallChar}".Contains(Field[Player.PosY - 1][Player.PosX]))
+            if (Player.PosY > 1 && !$"{BarrierChar}{WallChar}".Contains(Field[Player.PosY - 1][Player.PosX]))
             {
-                if (Field[Player.PosY - 1][Player.PosX] == _emptyPlaceChar)
+                if (Field[Player.PosY - 1][Player.PosX] == EmptyPlaceChar)
                 {
                     (Field[Player.PosY - 1][Player.PosX], Field[Player.PosY][Player.PosX]) =
                         (Field[Player.PosY][Player.PosX], Field[Player.PosY - 1][Player.PosX]);
                 }
-                if (Field[Player.PosY - 1][Player.PosX] == _treasureChar)
+                if (Field[Player.PosY - 1][Player.PosX] == TreasureChar)
                 {
-                    Field[Player.PosY - 1][Player.PosX] = _playerChar;
-                    Field[Player.PosY][Player.PosX] = _emptyPlaceChar;
+                    Field[Player.PosY - 1][Player.PosX] = PlayerChar;
+                    Field[Player.PosY][Player.PosX] = EmptyPlaceChar;
                     Player.Bag++;
                 }
                 Player.PosY--;
@@ -127,17 +131,17 @@ namespace TMSHomework
 
         private bool MovePlayerDown()
         {
-            if (Player.PosY < Rows + 1 && !$"{_barrierChar}{_wallChar}".Contains(Field[Player.PosY + 1][Player.PosX]))
+            if (Player.PosY < Rows + 1 && !$"{BarrierChar}{WallChar}".Contains(Field[Player.PosY + 1][Player.PosX]))
             {
-                if (Field[Player.PosY + 1][Player.PosX] == _emptyPlaceChar)
+                if (Field[Player.PosY + 1][Player.PosX] == EmptyPlaceChar)
                 {
                     (Field[Player.PosY + 1][Player.PosX], Field[Player.PosY][Player.PosX]) =
                         (Field[Player.PosY][Player.PosX], Field[Player.PosY + 1][Player.PosX]);
                 }
-                if (Field[Player.PosY + 1][Player.PosX] == _treasureChar)
+                if (Field[Player.PosY + 1][Player.PosX] == TreasureChar)
                 {
-                    Field[Player.PosY + 1][Player.PosX] = _playerChar;
-                    Field[Player.PosY][Player.PosX] = _emptyPlaceChar;
+                    Field[Player.PosY + 1][Player.PosX] = PlayerChar;
+                    Field[Player.PosY][Player.PosX] = EmptyPlaceChar;
                     Player.Bag++;
                 }
                 Player.PosY++;
@@ -149,17 +153,17 @@ namespace TMSHomework
 
         private bool MovePlayerLeft()
         {
-            if (Player.PosX > 1 && !$"{_barrierChar}{_wallChar}".Contains(Field[Player.PosY][Player.PosX - 1]))
+            if (Player.PosX > 1 && !$"{BarrierChar}{WallChar}".Contains(Field[Player.PosY][Player.PosX - 1]))
             {
-                if (Field[Player.PosY][Player.PosX - 1] == _emptyPlaceChar)
+                if (Field[Player.PosY][Player.PosX - 1] == EmptyPlaceChar)
                 {
                     (Field[Player.PosY][Player.PosX - 1], Field[Player.PosY][Player.PosX]) =
                         (Field[Player.PosY][Player.PosX], Field[Player.PosY][Player.PosX - 1]);
                 }
-                if (Field[Player.PosY][Player.PosX - 1] == _treasureChar)
+                if (Field[Player.PosY][Player.PosX - 1] == TreasureChar)
                 {
-                    Field[Player.PosY][Player.PosX - 1] = _playerChar;
-                    Field[Player.PosY][Player.PosX] = _emptyPlaceChar;
+                    Field[Player.PosY][Player.PosX - 1] = PlayerChar;
+                    Field[Player.PosY][Player.PosX] = EmptyPlaceChar;
                     Player.Bag++;
                 }
                 Player.PosX--;
@@ -171,17 +175,17 @@ namespace TMSHomework
 
         private bool MovePlayerRight()
         {
-            if (Player.PosX < Cols + 1 && !$"{_barrierChar}{_wallChar}".Contains(Field[Player.PosY][Player.PosX + 1]))
+            if (Player.PosX < Cols + 1 && !$"{BarrierChar}{WallChar}".Contains(Field[Player.PosY][Player.PosX + 1]))
             {
-                if (Field[Player.PosY][Player.PosX + 1] == _emptyPlaceChar)
+                if (Field[Player.PosY][Player.PosX + 1] == EmptyPlaceChar)
                 {
                     (Field[Player.PosY][Player.PosX + 1], Field[Player.PosY][Player.PosX]) =
                         (Field[Player.PosY][Player.PosX], Field[Player.PosY][Player.PosX + 1]);
                 }
-                if (Field[Player.PosY][Player.PosX + 1] == _treasureChar)
+                if (Field[Player.PosY][Player.PosX + 1] == TreasureChar)
                 {
-                    Field[Player.PosY][Player.PosX + 1] = _playerChar;
-                    Field[Player.PosY][Player.PosX] = _emptyPlaceChar;
+                    Field[Player.PosY][Player.PosX + 1] = PlayerChar;
+                    Field[Player.PosY][Player.PosX] = EmptyPlaceChar;
                     Player.Bag++;
                 }
                 Player.PosX++;
@@ -191,58 +195,16 @@ namespace TMSHomework
             return false;
         }
 
-        public void DrawField()
-        {
-            Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            for (int row = 0; row < Rows + 2; row++)
-            {
-                for (int col = 0; col < Cols + 2; col++)
-                {
-                    Console.Write(Field[row][col]);
-                }
-                Console.WriteLine();
-            }
-            DrawGameInfo();
-        }
-
-        private void DrawGameInfo()
-        {
-            Console.CursorVisible = false;
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.SetCursorPosition(Cols + 4, 0);
-            Console.WriteLine("TMS Lesson4-Task3-MiniGame");
-            Console.SetCursorPosition(Cols + 4, 1);
-            Console.WriteLine("Приложение моделирует систему управления виртуальным игровым пространством.");
-            Console.SetCursorPosition(Cols + 4, 2);
-            Console.WriteLine("В этом пространстве находятся клетки с разными объектами:");
-            Console.SetCursorPosition(Cols + 4, 3);
-            Console.WriteLine("(P - игрок, T - сокровище, # - стена, . - свободная клетка).");
-            Console.SetCursorPosition(Cols + 4, 4);
-            Console.WriteLine("Управление перемещением происходит клавишами W, A, S, D.");
-            Console.SetCursorPosition(Cols + 4, 5);
-            Console.WriteLine("Для выхода из приложения нажмите Esc.");
-            Console.SetCursorPosition(Cols + 4, 7);
-            Console.WriteLine("Статистика игры:");
-            Console.SetCursorPosition(Cols + 4, 8);
-            Console.WriteLine($"Кол-во ходов: {MoveCounter}");
-            Console.SetCursorPosition(Cols + 4, 9);
-            Console.WriteLine($"Кол-во собраных сокровищ: {Player.Bag}");
-            Console.SetCursorPosition(Cols + 4, 10);
-            Console.WriteLine($"Кол-во сокровищ в игре: {Field.SelectMany(ch => ch).Count(c => c == _treasureChar)}");
-        }
-
         public void GenerateAdditionalItems()
         {
-            if (MoveCounter % _stepToAddItems == 0)
+            if (MoveCounter % StepToAddItems == 0)
             {
-                var objCount = new Random().Next(1, 4);
-                var item = $"{_barrierChar}{_treasureChar}"[new Random().Next(0, 2)];
-                AddObjectsOnGameField(objCount, item, Field);
-                DrawField();
+                var itemCount = new Random().Next(MinItemAdd, MaxItemAdd + 1);
+                var item = $"{BarrierChar}{TreasureChar}"[new Random().Next(0, 2)];
+                AddObjectsOnGameField(itemCount, item, Field);
             }
         }
 
-        private bool IsEndGame() => !Field.SelectMany(ch => ch).Any(c => c == _treasureChar);
+        private bool IsEndGame() => !Field.SelectMany(ch => ch).Any(c => c == TreasureChar);
     }
 }
