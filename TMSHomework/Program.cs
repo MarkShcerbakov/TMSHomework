@@ -14,37 +14,42 @@
                 inputText = File.ReadAllText("test.txt");
                 Console.WriteLine(inputText + "\n");
                 var textParser = new TextParser(inputText);
-                DescriptionSelector.ShowMenu();
-
-                while (true)
+                if (textParser.IsCorrectInputText)
                 {
-                    int choice;
-                    while (!int.TryParse(Console.ReadLine(), out choice))
+                    DescriptionSelector.ShowMenu();
+                    while (true)
                     {
-                        Console.WriteLine("Сделайте корректый выбор!");
-                    }
-                    if (choice == 0)
-                    {
-                        Console.WriteLine("Спасибо за работу в приложении!\nУдачного дня!");
-                        break;
-                    }
-
-                    if (textParser.TextParserMethods.TryGetValue(choice, out Func<string[]> textParserMethods) &&
-                        DescriptionSelector.Discriptions.TryGetValue(choice, out string description))
-                    {
-                        Console.WriteLine(description);
-                        foreach (var item in textParserMethods())
+                        int choice;
+                        while (!int.TryParse(Console.ReadLine(), out choice))
                         {
-                            Console.WriteLine(item);
+                            Console.WriteLine("Сделайте корректый выбор!");
+                        }
+                        if (choice == 0)
+                        {
+                            Console.WriteLine("Спасибо за работу в приложении!\nУдачного дня!");
+                            break;
+                        }
+
+                        if (textParser.TextParserMethods.TryGetValue(choice, out Func<string[]> textParserMethods) &&
+                            DescriptionSelector.Discriptions.TryGetValue(choice, out string description))
+                        {
+                            Console.WriteLine(description);
+                            foreach (var item in textParserMethods().DefaultIfEmpty("-"))
+                            {
+                                Console.WriteLine(item);
+                            }
+                            Console.WriteLine();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Сделайте корректый выбор!\n");
                         }
                     }
-                    else
-                    {
-                        Console.WriteLine("Сделайте корректый выбор!");
-                        continue;
-                    }
                 }
-
+                else
+                {
+                    Console.WriteLine("Введен некорректный текст! Программа завершена!");
+                }
             }
             else
             {
