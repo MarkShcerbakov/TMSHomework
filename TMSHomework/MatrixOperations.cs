@@ -54,14 +54,16 @@ namespace TMSHomework
                 return new long[] { matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0] };
             }
 
-            long det = 0;
+            long determinant = 0;
             for (int j = 0; j < matrix.Length; j++)
             {
                 var smallMatrix = matrix[1..].Select(x => x.Where((_, i) => i != j).ToArray()).ToArray();
-                det += matrix[0][j] * MatrixDeterminant(smallMatrix)[0] * (j % 2 == 0 ? 1 : -1);
+                var sign = j % 2 == 0 ? 1 : -1;
+                var smallMatrixDeterminant = MatrixDeterminant(smallMatrix)[0];
+                determinant += matrix[0][j] * smallMatrixDeterminant * sign;
             }
 
-            return new long[] { det };
+            return new long[] { determinant };
         }
 
         public static void MatrixDisplay(Array arr)
