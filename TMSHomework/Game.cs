@@ -23,15 +23,17 @@ namespace TMSHomework
         public Dictionary<ConsoleKey, Func<bool>> PlayersMoves;
         public Player Player;
         public int MoveCounter;
-        public bool IsGameContinue;
-        public bool IsWin;
         public readonly int MinItemAdd = 1;
         public readonly int MaxItemAdd = 3;
+        public Random Randomizer;
+        public enum GameStatus { InProgress, Won, Lost };
+        public GameStatus Status { get; private set; }
 
         public Game(int rows, int cols)
         {
             Rows = rows;
             Cols = cols;
+            Randomizer = new();
             Field = GenerateField();
             Player = GetStartPlayerPosition();
             PlayersMoves = new()
@@ -42,8 +44,7 @@ namespace TMSHomework
                 [ConsoleKey.D] = MovePlayerRight,
             };
             MoveCounter = 0;
-            IsGameContinue = true;
-            IsWin = false;
+            Status = GameStatus.InProgress;
         }
 
         public char[][] GenerateField()
@@ -67,8 +68,8 @@ namespace TMSHomework
             int counter = 0;
             while (counter != count)
             {
-                var itemXPos = new Random().Next(1, Rows + 1);
-                var itemYPos = new Random().Next(1, Cols + 1);
+                var itemXPos = Randomizer.Next(1, Rows + 1);
+                var itemYPos = Randomizer.Next(1, Cols + 1);
                 if (field[itemXPos][itemYPos] == EmptyPlaceChar)
                 {
                     field[itemXPos][itemYPos] = item;
@@ -96,8 +97,7 @@ namespace TMSHomework
                 MoveCounter++;
                 if (IsEndGame())
                 {
-                    IsWin = true;
-                    IsGameContinue = false;
+                    Status = GameStatus.Won;
                     return;
                 }
                 else
@@ -199,8 +199,8 @@ namespace TMSHomework
         {
             if (MoveCounter % StepToAddItems == 0)
             {
-                var itemCount = new Random().Next(MinItemAdd, MaxItemAdd + 1);
-                var item = $"{BarrierChar}{TreasureChar}"[new Random().Next(0, 2)];
+                var itemCount = Randomizer.Next(MinItemAdd, MaxItemAdd + 1);
+                var item = $"{BarrierChar}{TreasureChar}"[Randomizer.Next(0, 2)];
                 AddObjectsOnGameField(itemCount, item, Field);
             }
         }

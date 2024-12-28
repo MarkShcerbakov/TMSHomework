@@ -26,7 +26,7 @@
             var game = new Game(rows, cols);
             var gameDraw = new GameDraw(game);
             gameDraw.DrawGameField();
-            while (game.IsGameContinue)
+            while (game.Status == Game.GameStatus.InProgress)
             {
                 if (Console.KeyAvailable)
                 {

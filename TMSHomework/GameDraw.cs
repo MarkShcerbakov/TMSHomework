@@ -65,7 +65,7 @@ namespace TMSHomework
         public void DrawEndGame()
         {
             var offset = 2;
-            if (TheGame.IsWin)
+            if (TheGame.Status == Game.GameStatus.Won)
             {
                 Console.SetCursorPosition(0, Math.Max(TheGame.Rows + 2, OffsetY) + offset);
                 Console.WriteLine("Поздравляю, Вы собрали все сокровища!");
