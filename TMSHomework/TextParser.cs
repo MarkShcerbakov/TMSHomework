@@ -33,7 +33,8 @@ namespace TMSHomework
 
         private string[] GetTextSentence() => Regex.Matches(Text, @"(?<=\A|\s).+?[\.\!\?]").Select(m => m.Value).ToArray();
 
-        private string[] GetWords() => TextSentence.SelectMany(sentence => sentence.Split()).ToArray();
+        //private string[] GetWords() => TextSentence.SelectMany(sentence => sentence.Split()).Select(word => Regex.Replace(word, @"\W+", "")).Where(word => word.Length > 0).ToArray();
+        private string[] GetWords() => TextSentence.SelectMany(sentence => Regex.Split(sentence, @"\b")).Where(word => word.Length > 1).ToArray(); //???
 
         private string[] WordsWithMaxDigits() => TextSentence.SelectMany(sentence => sentence.Split()).Where(word => Regex.IsMatch(word, @"\d+")).ToArray(); //???
 
@@ -41,16 +42,16 @@ namespace TMSHomework
         {
             var maxLength = Words.Max(word => word.Length);
             var longestWords = Words.Where(word => word.Length == maxLength).Distinct();
-            var longestWord = longestWords.Select(word => $"{word}-{Words.Count(item => item == word)}").ToArray();
+            var longestWord = longestWords.Select(word => $"{word} - {Words.Count(item => item == word)}").ToArray();
             return longestWord;
         }
 
-        private string[] DigitToWords() => TextSentence.Select(sentence => Regex.Replace(sentence, @"[0-9]", m => DigitWords[int.Parse(m.Value)])).ToArray();
+        private string[] DigitToWords() => TextSentence.Select(sentence => Regex.Replace(sentence, @"[0-9]", m => DigitWords[int.Parse(m.Value)])).ToArray(); //???
 
         private string[] QuestionAndExclamationSentences() => TextSentence.Where(sentence => "?!".Contains(sentence[^1])).OrderBy(sentence => -sentence[^1]).ToArray();
 
-        private string[] SentenceWithoutCommas() => TextSentence.Where(sentence => Regex.IsMatch(sentence, @"[^\,]")).ToArray();
+        private string[] SentenceWithoutCommas() => TextSentence.Where(sentence => !Regex.IsMatch(sentence, @"\,")).ToArray();
 
-        private string[] WordsWithSameFirstAndLastLetters() => Words.Where(word => word[0] == word[^1]).Distinct().ToArray();
+        private string[] WordsWithSameFirstAndLastLetters() => Words.Where(word => word.Length > 2 && word[0] == word[^1]).Distinct().ToArray();
     }
 }
