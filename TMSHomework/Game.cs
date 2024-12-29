@@ -20,7 +20,7 @@ namespace TMSHomework
         public int Rows;
         public int Cols;
         public char[][] Field;
-        public Dictionary<ConsoleKey, Func<bool>> PlayersMoves;
+        public Dictionary<ConsoleKey, (int offsetY, int offsetX)> PlayersMoves;
         public Player Player;
         public int MoveCounter;
         public readonly int MinItemAdd = 1;
@@ -38,10 +38,10 @@ namespace TMSHomework
             Player = GetStartPlayerPosition();
             PlayersMoves = new()
             {
-                [ConsoleKey.W] = MovePlayerUp,
-                [ConsoleKey.S] = MovePlayerDown,
-                [ConsoleKey.A] = MovePlayerLeft,
-                [ConsoleKey.D] = MovePlayerRight,
+                [ConsoleKey.W] = (-1, 0),
+                [ConsoleKey.S] = (1, 0),
+                [ConsoleKey.A] = (0, -1),
+                [ConsoleKey.D] = (0, 1),
             };
             MoveCounter = 0;
             Status = GameStatus.InProgress;
@@ -90,109 +90,40 @@ namespace TMSHomework
             return new Player(yPos, xPos);
         }
 
-        public void MovePlayer(bool isMove)
+        public void MovePlayer((int Y, int X) offsets)
         {
-            if (isMove)
+            if (Field[Player.PosY + offsets.Y][Player.PosX + offsets.X] == TreasureChar)
             {
-                MoveCounter++;
-                if (IsEndGame())
-                {
-                    Status = GameStatus.Won;
-                    return;
-                }
-                else
-                {
-                    GenerateAdditionalItems();
-                }
+                Player.Bag++;
+            }
+
+            Field[Player.PosY + offsets.Y][Player.PosX + offsets.X] = PlayerChar;
+            Field[Player.PosY][Player.PosX] = EmptyPlaceChar;
+            Player.PosY += offsets.Y;
+            Player.PosX += offsets.X;
+            MoveCounter++;
+
+            if (IsEndGame())
+            {
+                Status = GameStatus.Won;
+                return;
+            }
+            else
+            {
+                GenerateAdditionalItems();
             }
         }
 
-        private bool MovePlayerUp()
+        public bool IsPlayerMove((int Y, int X) offsets)
         {
-            if (Player.PosY > 1 && !$"{BarrierChar}{WallChar}".Contains(Field[Player.PosY - 1][Player.PosX]))
+            if (!$"{WallChar}{BarrierChar}".Contains(Field[Player.PosY + offsets.Y][Player.PosX + offsets.X]))
             {
-                if (Field[Player.PosY - 1][Player.PosX] == EmptyPlaceChar)
-                {
-                    (Field[Player.PosY - 1][Player.PosX], Field[Player.PosY][Player.PosX]) =
-                        (Field[Player.PosY][Player.PosX], Field[Player.PosY - 1][Player.PosX]);
-                }
-                if (Field[Player.PosY - 1][Player.PosX] == TreasureChar)
-                {
-                    Field[Player.PosY - 1][Player.PosX] = PlayerChar;
-                    Field[Player.PosY][Player.PosX] = EmptyPlaceChar;
-                    Player.Bag++;
-                }
-                Player.PosY--;
                 return true;
             }
-
-            return false;
-        }
-
-        private bool MovePlayerDown()
-        {
-            if (Player.PosY < Rows + 1 && !$"{BarrierChar}{WallChar}".Contains(Field[Player.PosY + 1][Player.PosX]))
+            else
             {
-                if (Field[Player.PosY + 1][Player.PosX] == EmptyPlaceChar)
-                {
-                    (Field[Player.PosY + 1][Player.PosX], Field[Player.PosY][Player.PosX]) =
-                        (Field[Player.PosY][Player.PosX], Field[Player.PosY + 1][Player.PosX]);
-                }
-                if (Field[Player.PosY + 1][Player.PosX] == TreasureChar)
-                {
-                    Field[Player.PosY + 1][Player.PosX] = PlayerChar;
-                    Field[Player.PosY][Player.PosX] = EmptyPlaceChar;
-                    Player.Bag++;
-                }
-                Player.PosY++;
-                return true;
+                return false;
             }
-
-            return false;
-        }
-
-        private bool MovePlayerLeft()
-        {
-            if (Player.PosX > 1 && !$"{BarrierChar}{WallChar}".Contains(Field[Player.PosY][Player.PosX - 1]))
-            {
-                if (Field[Player.PosY][Player.PosX - 1] == EmptyPlaceChar)
-                {
-                    (Field[Player.PosY][Player.PosX - 1], Field[Player.PosY][Player.PosX]) =
-                        (Field[Player.PosY][Player.PosX], Field[Player.PosY][Player.PosX - 1]);
-                }
-                if (Field[Player.PosY][Player.PosX - 1] == TreasureChar)
-                {
-                    Field[Player.PosY][Player.PosX - 1] = PlayerChar;
-                    Field[Player.PosY][Player.PosX] = EmptyPlaceChar;
-                    Player.Bag++;
-                }
-                Player.PosX--;
-                return true;
-            }
-
-            return false;
-        }
-
-        private bool MovePlayerRight()
-        {
-            if (Player.PosX < Cols + 1 && !$"{BarrierChar}{WallChar}".Contains(Field[Player.PosY][Player.PosX + 1]))
-            {
-                if (Field[Player.PosY][Player.PosX + 1] == EmptyPlaceChar)
-                {
-                    (Field[Player.PosY][Player.PosX + 1], Field[Player.PosY][Player.PosX]) =
-                        (Field[Player.PosY][Player.PosX], Field[Player.PosY][Player.PosX + 1]);
-                }
-                if (Field[Player.PosY][Player.PosX + 1] == TreasureChar)
-                {
-                    Field[Player.PosY][Player.PosX + 1] = PlayerChar;
-                    Field[Player.PosY][Player.PosX] = EmptyPlaceChar;
-                    Player.Bag++;
-                }
-                Player.PosX++;
-                return true;
-            }
-
-            return false;
         }
 
         public void GenerateAdditionalItems()

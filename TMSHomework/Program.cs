@@ -36,12 +36,12 @@
                     {
                         break;
                     }
-                    if (game.PlayersMoves.TryGetValue(keyPressed, out Func<bool> movePlayer))
+                    if (game.PlayersMoves.TryGetValue(keyPressed, out (int, int) movePlayer))
                     {
                         // Если игрок совершил движение
-                        if (movePlayer())
+                        if (game.IsPlayerMove(movePlayer))
                         {
-                            game.MovePlayer(true);
+                            game.MovePlayer(movePlayer);
                             gameDraw.DrawGameField();
                         }
                     }
