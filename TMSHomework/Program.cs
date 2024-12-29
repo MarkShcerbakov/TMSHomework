@@ -56,7 +56,7 @@
             }
 
             gameDraw.DrawEndGame();
-            Console.ReadKey();
+            Console.ReadKey(true);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace TMSHomework
 
         public Player(int rows, int cols)
         {
-            Randomiser = new Random();
+            Randomiser = new();
             PosY = Randomiser.Next(1, rows + 1);
             PosX = Randomiser.Next(1, cols + 1);
             Bag = 0;

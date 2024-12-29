@@ -21,7 +21,7 @@ namespace TMSHomework
             Cols = cols;
             PlayerX = playerX;
             PlayerY = playerY;
-            Randomizer = new Random();
+            Randomizer = new();
             GameField = GenerateField();
         }
 
