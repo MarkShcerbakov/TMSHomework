@@ -20,7 +20,7 @@ namespace TMSHomework
         public int Rows;
         public int Cols;
         public char[][] Field;
-        public Dictionary<ConsoleKey, (int offsetY, int offsetX)> PlayersMoves;
+        public Dictionary<ConsoleKey, (int offsetYd, int offsetX)> PlayersMoves;
         public Player Player;
         public int MoveCounter;
         public readonly int MinItemAdd = 1;
@@ -92,11 +92,7 @@ namespace TMSHomework
 
         public void MovePlayer((int Y, int X) offsets)
         {
-            if (Field[Player.PosY + offsets.Y][Player.PosX + offsets.X] == TreasureChar)
-            {
-                Player.Bag++;
-            }
-
+            Player.Bag += (Field[Player.PosY + offsets.Y][Player.PosX + offsets.X] == TreasureChar) ? 1 : 0;
             Field[Player.PosY + offsets.Y][Player.PosX + offsets.X] = PlayerChar;
             Field[Player.PosY][Player.PosX] = EmptyPlaceChar;
             Player.PosY += offsets.Y;
@@ -108,10 +104,7 @@ namespace TMSHomework
                 Status = GameStatus.Won;
                 return;
             }
-            else
-            {
-                GenerateAdditionalItems();
-            }
+            GenerateAdditionalItems();
         }
 
         public bool IsPlayerMove((int Y, int X) offsets)
