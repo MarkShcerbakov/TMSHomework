@@ -12,7 +12,7 @@ namespace TMSHomework
         public Field Field;
         public enum GameStatus { InProgress, Won, Lost };
         public GameStatus Status;
-        Random Randomizer;
+        public Random Randomizer;
 
         public GameState(Player player, Field field)
         {
