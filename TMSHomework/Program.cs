@@ -23,10 +23,14 @@
                 Console.WriteLine("Введите корректное значение кол-во строк!");
             }
 
-            var game = new Game(rows, cols);
-            var gameDraw = new GameDraw(game);
-            gameDraw.DrawGameField();
-            while (game.Status == Game.GameStatus.InProgress)
+            var player = new Player(rows, cols);
+            var field = new Field(rows, cols, player.PosY, player.PosX);
+            var playerController = new PlayerController(player, field);
+            var gameState = new GameState(player, field);
+            var gameDraw = new GameDraw(gameState);
+            field.DrawGameField();
+            gameDraw.DrawGameInfo();
+            while (gameState.Status == GameState.GameStatus.InProgress)
             {
                 if (Console.KeyAvailable)
                 {
@@ -36,13 +40,16 @@
                     {
                         break;
                     }
-                    if (game.PlayersMoves.TryGetValue(keyPressed, out (int, int) movePlayer))
+                    if (playerController.PlayersMoves.TryGetValue(keyPressed, out (int, int) movePlayer))
                     {
                         // Если игрок совершил движение
-                        if (game.IsPlayerMove(movePlayer))
+                        if (playerController.IsPlayerMove(movePlayer))
                         {
-                            game.MovePlayer(movePlayer);
-                            gameDraw.DrawGameField();
+                            playerController.MovePlayer(movePlayer);
+                            gameState.EndGame();
+                            gameState.GenerateAdditionalItems();
+                            field.DrawGameField();
+                            gameDraw.DrawGameInfo();
                         }
                     }
                 }

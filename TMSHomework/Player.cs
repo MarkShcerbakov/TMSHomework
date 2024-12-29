@@ -9,14 +9,22 @@ namespace TMSHomework
     internal class Player
     {
         public int PosX { get; set; }
+
         public int PosY { get; set; }
+
         public int Bag { get; set; }
 
-        public Player(int posY, int posX)
+        public int MoveCounter { get; set; }
+
+        public Random Randomiser;
+
+        public Player(int rows, int cols)
         {
-            PosY = posY;
-            PosX = posX;
+            Randomiser = new Random();
+            PosY = Randomiser.Next(1, rows + 1);
+            PosX = Randomiser.Next(1, cols + 1);
             Bag = 0;
+            MoveCounter = 0;
         }
     }
 }
