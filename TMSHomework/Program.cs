@@ -22,7 +22,7 @@
                         int choice;
                         while (!int.TryParse(Console.ReadLine(), out choice))
                         {
-                            Console.WriteLine("Сделайте корректый выбор!");
+                            Console.WriteLine("Сделайте корректный выбор!");
                         }
                         if (choice == 0)
                         {
@@ -42,7 +42,7 @@
                         }
                         else
                         {
-                            Console.WriteLine("Сделайте корректый выбор!\n");
+                            Console.WriteLine("Сделайте корректный выбор!\n");
                         }
                     }
                 }
