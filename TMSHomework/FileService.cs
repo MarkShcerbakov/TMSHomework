@@ -20,7 +20,7 @@ namespace TMSHomework
 
         public static string ReadInputFile(string path)
         {
-            var inputText = File.ReadAllText("test.txt");
+            var inputText = File.ReadAllText(path);
             Console.WriteLine(inputText + "\n");
             return inputText;
         }
