@@ -8,21 +8,26 @@ namespace TMSHomework
 {
     internal class FileService
     {
-        public static bool CheckInputFile(string path)
+        public static bool TryReadFile(string path, out string inputText)
         {
-            var check = File.Exists(path);
-            if (!check)
+            var isFileExists = File.Exists(path);
+            if (!isFileExists)
             {
+                inputText = "";
                 Console.WriteLine("\"Файл с текстом не найден!\"");
             }
-            return check;
+            else
+            {
+                inputText = File.ReadAllText(path);
+                PrintInputFile(inputText);
+            }
+
+            return isFileExists;
         }
 
-        public static string ReadInputFile(string path)
+        public static void PrintInputFile(string inputText)
         {
-            var inputText = File.ReadAllText(path);
             Console.WriteLine(inputText + "\n");
-            return inputText;
         }
     }
 }

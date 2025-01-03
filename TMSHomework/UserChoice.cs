@@ -17,7 +17,6 @@ namespace TMSHomework
             if (choice == 0)
             {
                 Console.WriteLine("Спасибо за работу в приложении!\nУдачного дня!");
-                choice = 0;
                 return false;
             }
 
