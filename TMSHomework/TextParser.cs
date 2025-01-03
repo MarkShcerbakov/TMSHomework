@@ -33,7 +33,15 @@ namespace TMSHomework
             };
         }
 
-        private bool CheckInputText() => Regex.IsMatch(Text, @"\w+[\.\!\?]") ? true : false;
+        private bool CheckInputText()
+        {
+            var check = Regex.IsMatch(Text, @"\w+[\.\!\?]");
+            if (!check)
+            {
+                Console.WriteLine("\"Введен некорректный текст! Программа завершена!\"");
+            }
+            return check;
+        }
 
         private string[] GetTextSentence() => Regex.Matches(Text, @"\w.+?[\.\!\?]").Select(m => m.Value).ToArray();
 
@@ -57,5 +65,23 @@ namespace TMSHomework
         private string[] SentenceWithoutCommas() => TextSentence.Where(sentence => !Regex.IsMatch(sentence, @"\,")).ToArray();
 
         private string[] WordsWithSameFirstAndLastLetters() => Words.Distinct().Where(word => word[0] == word[^1]).ToArray();
+
+        public void GetParsedText(int choice)
+        {
+            if (TextParserMethods.TryGetValue(choice, out Func<string[]> textParserMethods) &&
+    DescriptionSelector.Descriptions.TryGetValue(choice, out string description))
+            {
+                Console.WriteLine(description);
+                foreach (var item in textParserMethods().DefaultIfEmpty("-"))
+                {
+                    Console.WriteLine(item);
+                }
+                Console.WriteLine();
+            }
+            else
+            {
+                Console.WriteLine("Сделайте корректный выбор!\n");
+            }
+        }
     }
 }

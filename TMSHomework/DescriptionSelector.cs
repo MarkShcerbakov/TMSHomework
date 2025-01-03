@@ -8,7 +8,7 @@ namespace TMSHomework
 {
     internal class DescriptionSelector
     {
-        public static Dictionary<int, string> Discriptions = new()
+        public static Dictionary<int, string> Descriptions = new()
         {
             [1] = "\nСлова, содержащие максимальное кол-во цифр:",
             [2] = "\nСамое длинное слово и кол-во раз, встречаемых в тексте:",

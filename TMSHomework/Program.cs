@@ -8,52 +8,20 @@
             Console.WriteLine("Приложение позволяет выводить информацию о введенном фрагменте текста.");
             Console.WriteLine("В данном случае будет приведен отрывок из спортивной статьи.\n");
 
-            var inputText = "";
-            if (File.Exists("test.txt"))
+            var filePath = "test.txt";
+            if (!FileService.CheckInputFile(filePath))
             {
-                inputText = File.ReadAllText("test.txt");
-                Console.WriteLine(inputText + "\n");
-                var textParser = new TextParser(inputText);
-                if (textParser.IsCorrectInputText)
-                {
-                    DescriptionSelector.ShowMenu();
-                    while (true)
-                    {
-                        int choice;
-                        while (!int.TryParse(Console.ReadLine(), out choice))
-                        {
-                            Console.WriteLine("Сделайте корректный выбор!");
-                        }
-                        if (choice == 0)
-                        {
-                            Console.WriteLine("Спасибо за работу в приложении!\nУдачного дня!");
-                            break;
-                        }
-
-                        if (textParser.TextParserMethods.TryGetValue(choice, out Func<string[]> textParserMethods) &&
-                            DescriptionSelector.Discriptions.TryGetValue(choice, out string description))
-                        {
-                            Console.WriteLine(description);
-                            foreach (var item in textParserMethods().DefaultIfEmpty("-"))
-                            {
-                                Console.WriteLine(item);
-                            }
-                            Console.WriteLine();
-                        }
-                        else
-                        {
-                            Console.WriteLine("Сделайте корректный выбор!\n");
-                        }
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Введен некорректный текст! Программа завершена!");
-                }
+                return;
             }
-            else
+            var inputText = FileService.ReadInputFile(filePath);
+            var textParser = new TextParser(inputText);
+            if (textParser.IsCorrectInputText)
             {
-                Console.WriteLine("Файл с текстом не найден!");
+                DescriptionSelector.ShowMenu();
+                while (UserChoice.GetChoice(Console.ReadLine(), out int choice))
+                {
+                    textParser.GetParsedText(choice);
+                }
             }
 
             Console.ReadKey();
