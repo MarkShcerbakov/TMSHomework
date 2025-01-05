@@ -10,6 +10,7 @@ namespace TMSHomework
     internal class ExpressionCalculator
     {
         private const string _operatorsPriority = "^*/%+-";
+        private static readonly string[] _groupsPriority = new[] { "^", "*/%", "+-" };
 
         public static string Compute(string expression)
         {
@@ -34,7 +35,9 @@ namespace TMSHomework
 
         private static string UpdateExpression(string expression)
         {
-            var match = _operatorsPriority.Select(op => Regex.Match(expression, $@"(?<=[\+\-\*\/\^\%\(]|\A)((-?)(\d?\,?\d+))(\{op})((-?)(\d?\,?\d+))")).First(m => m.Success);
+            var operations = _operatorsPriority.Select(op => Regex.Match(expression, $@"(?<=[\+\-\*\/\^\%\(]|\A)((-?)(\d*\,?\d+))(\{op})((-?)(\d*\,?\d+))")).Where(m => m.Success);
+            var match = operations.Where(op => Array.FindIndex(_groupsPriority, gp => gp.Contains(operations.First().Groups[4].Value)) ==
+                    Array.FindIndex(_groupsPriority, gp => gp.Contains(op.Groups[4].Value))).MinBy(m => m.Index);
             var calc = Calculate(match.Groups[1].Value, match.Groups[5].Value, match.Groups[4].Value);
             var updateExpression = expression.Replace(match.Value, $"{calc}");
             return updateExpression;
