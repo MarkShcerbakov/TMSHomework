@@ -1,0 +1,71 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
+namespace TMSHomework
+{
+    internal class ExpressionCalculator
+    {
+        private const string _operatorsPriority = "^*/%+-";
+        private static readonly string[] _groupsPriority = new[] { "^", "*/%", "+-" };
+
+        public static string Compute(string expression)
+        {
+            expression = Regex.Replace(expression, @"\s", "");
+            if (BracersValidator(Regex.Replace(expression, @"[^\(\)]", "")))
+            {
+                return "Некорректное выражение!";
+            }
+            if (double.TryParse(expression, out double _))
+            {
+                return expression;
+            }
+            if (Regex.IsMatch(expression, @"\([^\(\)]+?\)"))
+            {
+                return Compute(UpdateExpressionInBracers(expression));
+            }
+            else
+            {
+                return Compute(UpdateExpression(expression));
+            }
+        }
+
+        private static string UpdateExpression(string expression)
+        {
+            var operations = _operatorsPriority.Select(op => Regex.Match(expression, $@"(?<=[\+\-\*\/\^\%\(]|\A)((-?)(\d*\,?\d+))(\{op})((-?)(\d*\,?\d+))")).Where(m => m.Success);
+            var match = operations.Where(op => Array.FindIndex(_groupsPriority, gp => gp.Contains(operations.First().Groups[4].Value)) ==
+                    Array.FindIndex(_groupsPriority, gp => gp.Contains(op.Groups[4].Value))).MinBy(m => m.Index);
+            var calc = Calculate(match.Groups[1].Value, match.Groups[5].Value, match.Groups[4].Value);
+            var updateExpression = expression.Replace(match.Value, $"{calc}");
+            return updateExpression;
+        }
+
+        private static string UpdateExpressionInBracers(string expression)
+        {
+            var match = Regex.Match(expression, @"\([^\(\)]+?\)");
+            var calc = Compute(match.Value[1..^1]);
+            var updateExpression = expression.Replace(match.Value, $"{calc}");
+            return updateExpression;
+        }
+
+        private static double Calculate(string a, string b, string op) => op switch
+        {
+            "+" => double.Parse(a) + double.Parse(b),
+            "-" => double.Parse(a) - double.Parse(b),
+            "*" => double.Parse(a) * double.Parse(b),
+            "/" => b == "0"
+                ? throw new DivideByZeroException("Деление на ноль!")
+                : double.Parse(a) / double.Parse(b),
+            "^" => a[0] == '-' && b == "0,5"
+                ? throw new ArithmeticException("Корень из отрицательного числа!")
+                : Math.Pow(double.Parse(a), double.Parse(b)),
+            "%" => double.Parse(a) % double.Parse(b),
+            _ => throw new ArithmeticException()
+        };
+
+        private static bool BracersValidator(string expression) => expression.Aggregate(expression, (cur, _) => Regex.Replace(cur, @"\(\)", "")).Any();
+    }
+}
