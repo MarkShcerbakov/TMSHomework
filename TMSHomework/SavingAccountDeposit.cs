@@ -14,7 +14,6 @@ namespace TMSHomework
 
         public SavingAccountDeposit(decimal interestRate) : base(interestRate)
         {
-            
         }
 
         public override decimal SetDepositConditions()

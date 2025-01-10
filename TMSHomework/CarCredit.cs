@@ -15,7 +15,6 @@ namespace TMSHomework
 
         public CarCredit(decimal interestRate) : base(interestRate)
         {
-            
         }
 
         public override decimal SetCreditConditions()
