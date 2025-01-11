@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -91,7 +92,7 @@ namespace TMSHomework
             foreach (var property in productProperties)
             {
                 int argument;
-                Console.WriteLine(property.CustomAttributes.First().NamedArguments.First().TypedValue);
+                Console.WriteLine(property.GetCustomAttribute<DescriptionAttribute>().Description);
                 while (!int.TryParse(Console.ReadLine(), out argument) || argument < 0)
                 {
                     Console.WriteLine("Введите корректное значение!");

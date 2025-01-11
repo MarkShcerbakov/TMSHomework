@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
+
 
 namespace TMSHomework
 {
@@ -11,18 +13,19 @@ namespace TMSHomework
     {
         private DateTime ProductStartDate { get; set; }
         private decimal TotalPayment { get; set; }
+
         private decimal PaymentPerMonth { get; set; }
 
-        [Display(Description = "Требуемый кредит")]
+        [Description("Требуемый кредит")]
         public decimal RequiredCredit { get; set; }
 
-        [Display(Description = "Первый взнос")]
+        [Description("Первый взнос")]
         public decimal FirstPayment { get; set; }
 
-        [Display(Description = "Срок действия кредита")]
+        [Description("Срок действия кредита")]
         public decimal CreditDuration { get; set; }
 
-        [Display(Description = "Процентная ставка")]
+        [Description("Процентная ставка")]
         public decimal InterestRate { get; set; }
 
         public CreditBase(decimal requiredCredit, decimal firstPayment, decimal creditDuration, decimal interestRate)

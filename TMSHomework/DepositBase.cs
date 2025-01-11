@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -12,13 +13,13 @@ namespace TMSHomework
         private DateTime ProductStartDate { get; set; }
         private decimal DepositEarning { get; set; }
 
-        [Display(Description = "Первый платеж")]
+        [Description("Первый платеж")]
         public decimal FirstPayment { get; set; }
 
-        [Display(Description = "Срок депозита")]
+        [Description("Срок депозита")]
         public decimal DepositDuration { get; set; }
 
-        [Display(Description = "Процентная ставка")]
+        [Description("Процентная ставка")]
         public decimal InterestRate { get; set; }
 
         public DepositBase(decimal firstPayment, decimal depositDuration, decimal interestRate)
