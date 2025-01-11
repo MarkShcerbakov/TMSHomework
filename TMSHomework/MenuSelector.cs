@@ -26,7 +26,7 @@ namespace TMSHomework
             };
         }
 
-        public Dictionary<int, (int, string)> SelectMenu((int, string) choice)
+        public Dictionary<int, (int, string)> GetMenu((int, string) choice)
         {
             return AllMenu[choice.Item1];
         }

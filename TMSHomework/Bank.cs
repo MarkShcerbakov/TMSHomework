@@ -47,7 +47,7 @@ namespace TMSHomework
                     continue;
                 }
 
-                menu = menuSelector.SelectMenu(selectedOption);
+                menu = menuSelector.GetMenu(selectedOption);
                 actionSelector.GetAction(selectedOption);
             }
 
