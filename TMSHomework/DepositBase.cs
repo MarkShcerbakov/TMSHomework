@@ -62,7 +62,7 @@ namespace TMSHomework
                    $"\nОбщая сумма депозита: {DepositEarning,0:N2}" +
                    $"\nСрок депозита: {DepositDuration,0:N0} мес." +
                    $"\nПроцентная ставка по депозиту: {InterestRate} %" +
-                   $"\nНа текущий момент заработано: {GetCurrentDeposit(),0:N2} %";
+                   $"\nНа текущий момент заработано: {GetCurrentDeposit(),0:N2}";
         }
 
         public virtual string GetShortProductInfo()

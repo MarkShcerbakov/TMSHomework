@@ -13,7 +13,6 @@ namespace TMSHomework
         public IProduct[] Products { get; set; }
         public Client[] Clients { get; set; }
         public BankWorkStatus Status { get; set; }
-        public MenuSelector Menu { get; set; }
 
         public Bank(string name, int startMoney, IProduct[] products, Client[] clients)
         {
@@ -22,7 +21,6 @@ namespace TMSHomework
             Products = products;
             Clients = clients;
             Status = BankWorkStatus.Working;
-            Menu = new();
         }
 
         public Bank(string name, IProduct[] products, Client[] clients)
@@ -31,17 +29,17 @@ namespace TMSHomework
             Products = products;
             Clients = clients;
             Status = BankWorkStatus.Working;
-            Menu = new();
         }
 
         public void Run()
         {
             var actionSelector = new ActionSelector(Products, Clients);
+            var menuSelector = new MenuSelector();
             Console.WriteLine($"Здравствуйте, Вас приветсвует {Name}!");
-            var menu = Menu.MainMenu;
+            var menu = menuSelector.MainMenu;
             while (Status == BankWorkStatus.Working)
             {
-                actionSelector.ShowMenu(menu);
+                actionSelector.Roster.ShowMenu(menu);
                 CheckInput(menu, out (int, string) selectedOption);
                 if (IsClosed(selectedOption.Item2))
                 {
@@ -49,8 +47,8 @@ namespace TMSHomework
                     continue;
                 }
 
-                menu = Menu.SelectMenu(selectedOption);
-                actionSelector.DoAction(selectedOption);
+                menu = menuSelector.SelectMenu(selectedOption);
+                actionSelector.GetAction(selectedOption);
             }
 
             Console.WriteLine("Спасибо за выбор нашего банка!");
