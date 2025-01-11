@@ -8,55 +8,21 @@ namespace TMSHomework
 {
     internal class MenuSelector
     {
-        public Dictionary<int, (int, string)> MainMenu { get; set; } = new()
-        {
-            [0] = (0, "Выйти из банка"),
-            [1] = (1, "Информация о продуктах"),
-            [2] = (3, "Информация о клиентах"),
-        };
-
-        public Dictionary<int, (int, string)> ClientsMenu { get; set; } = new()
-        {
-            [0] = (0, "Вернуться к услугам банка"),
-            [1] = (4, "Выбрать клиента"),
-            //[2] = (4, "Добавить клиента"),
-            //[3] = (4, "Удалить клиента")
-        };
-
-        public Dictionary<int, (int, string)> ProductsMenu { get; set; } = new()
-        {
-            [0] = (0, "Вернуться к услугам банка"),
-            [1] = (2, "Выбрать продукт"),
-            //[2] = (2, "Добавить продукт"),
-            //[3] = (2, "Удалить продукт")
-        };
-
-        public Dictionary<int, (int, string)> ClientMenu { get; set; } = new()
-        {
-            [0] = (3, "Вернуться к клиентам"),
-            [1] = (5, "Удалить услугу"),
-            [2] = (6, "Добавить услугу")
-        };
-
-        public Dictionary<int, (int, string)> ProductMenu { get; set; } = new()
-        {
-            [0] = (1, "Вернуться к продуктам"),
-            //[1] = (2, "Изменить услугу")
-        };
-
+        public MenuRoster Roster { get; set; }
         public Dictionary<int, Dictionary<int, (int, string)>> AllMenu { get; set; }
 
         public MenuSelector()
         {
+            Roster = new();
             AllMenu = new()
             {
-                [0] = MainMenu,
-                [1] = ProductsMenu,
-                [2] = ProductMenu,
-                [3] = ClientsMenu,
-                [4] = ClientMenu,
-                [5] = ClientMenu,
-                [6] = ClientMenu
+                [0] = Roster.MainMenu,
+                [1] = Roster.ProductsMenu,
+                [2] = Roster.ProductMenu,
+                [3] = Roster.ClientsMenu,
+                [4] = Roster.ClientMenu,
+                [5] = Roster.ClientMenu,
+                [6] = Roster.ClientMenu
             };
         }
 

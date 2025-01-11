@@ -36,7 +36,7 @@ namespace TMSHomework
             var actionSelector = new ActionSelector(Products, Clients);
             var menuSelector = new MenuSelector();
             Console.WriteLine($"Здравствуйте, Вас приветсвует {Name}!");
-            var menu = menuSelector.MainMenu;
+            var menu = menuSelector.Roster.MainMenu;
             while (Status == BankWorkStatus.Working)
             {
                 actionSelector.Roster.ShowMenu(menu);
