@@ -22,7 +22,8 @@ namespace TMSHomework
                 [3] = Roster.ClientsMenu,
                 [4] = Roster.ClientMenu,
                 [5] = Roster.ClientMenu,
-                [6] = Roster.ClientMenu
+                [6] = Roster.ClientMenu,
+                [7] = Roster.ClientMenu
             };
         }
 

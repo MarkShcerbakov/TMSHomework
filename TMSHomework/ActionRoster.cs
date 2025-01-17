@@ -100,6 +100,27 @@ namespace TMSHomework
             Console.WriteLine(Clients[ClientChoice - 1].GetClientInfo());
         }
 
+        public void AddClient()
+        {
+            var client = new Client();
+            var clientProperties = typeof(Client).GetProperties().Where(pi => pi.GetCustomAttributes(typeof(DescriptionAttribute), false).Any());
+            var arguments = new List<object>();
+            foreach (var property in clientProperties)
+            {
+                var propertyType = property.PropertyType;
+                //int argument;
+                Console.WriteLine(property.GetCustomAttribute<DescriptionAttribute>().Description);
+                //while (!int.TryParse(Console.ReadLine(), out argument) || argument < 0)
+                //{
+                //    Console.WriteLine("Введите корректное значение!");
+                //}
+                //arguments.Add(argument);
+                //property.SetValue(client, Console.ReadLine());
+            }
+
+            ClientChoice = Clients.Length + 1;
+        }
+
         public void ShowMenu(Dictionary<int, (int, string)> menu)
         {
             Console.WriteLine("Сделайте выбор:");

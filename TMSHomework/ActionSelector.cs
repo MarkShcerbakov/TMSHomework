@@ -23,7 +23,8 @@ namespace TMSHomework
                 [3] = Roster.ShowClients,
                 [4] = Roster.ShowClient,
                 [5] = Roster.RemoveProductFromClient,
-                [6] = Roster.AddProductToClient
+                [6] = Roster.AddProductToClient,
+                [7] = Roster.AddClient
             };
         }
 
