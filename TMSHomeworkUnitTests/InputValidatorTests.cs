@@ -33,7 +33,7 @@ namespace TMSHomeworkUnitTests
         [InlineData("Ma")]
         [InlineData("Mark!")]
         [InlineData(null)]
-        [InlineData("qiweyiuqwiyiqwvcyviqwvycviqwyi")]
+        [InlineData("qiweyiuqwiyiqwvcyvix")]
         public void ValidateLogin_ShouldWrongLoginExceptionThrows(string name)
         {
             Assert.Throws<WrongLoginException>(() => InputValidator.ValidateLogin(name));
