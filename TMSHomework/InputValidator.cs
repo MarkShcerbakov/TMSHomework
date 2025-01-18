@@ -9,8 +9,8 @@ namespace TMSHomework
 {
     public class InputValidator
     {
-        private static readonly string _loginPattern = @"^\w{3,20}$";
-        private static readonly string _passwordPattern = @"^(?=.*(\d)).{6,20}$";
+        private static readonly string _loginPattern = @"^\w{3,19}$";
+        private static readonly string _passwordPattern = @"^(?=.*(\d)).{6,19}$";
 
         public static bool IsCorrectInput(string login, string password, string confirmPassword)
         {
