@@ -9,8 +9,12 @@ namespace TMSHomework
 {
     public class InputValidator
     {
-        private static readonly string _loginPattern = @"^\w{3,19}$";
-        private static readonly string _passwordPattern = @"^(?=.*\d).{6,19}$";
+        private static readonly int _minLoginLength = 3;
+        private static readonly int _maxLoginLength = 19;
+        private static readonly int _minPasswordLength = 6;
+        private static readonly int _maxPasswordLength = 19;
+        private static readonly string _loginPattern = $@"^\w{{{_minLoginLength},{_maxLoginLength}}}$";
+        private static readonly string _passwordPattern = $@"^(?=.*\d).{{{_minPasswordLength},{_maxPasswordLength}}}$";
 
         public static bool IsCorrectInput(string login, string password, string confirmPassword)
         {
