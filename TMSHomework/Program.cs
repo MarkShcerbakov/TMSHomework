@@ -5,7 +5,7 @@
         static void Main(string[] args)
         {
             Console.WriteLine("TMS Lesson10-Task1-InputValidator");
-            Console.WriteLine("Приложение осуществляет проверку введенных пользователем данных, выброс соответсвующих исключений и их обработку, а также тестирование.\n");
+            Console.WriteLine("Приложение осуществляет проверку введенных пользователем данных, выброс соответсвующих исключений и их обработку.\nА также тестирование.\n");
 
             Console.WriteLine("Введите имя пользователя:");
             var userName = Console.ReadLine();

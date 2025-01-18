@@ -15,10 +15,9 @@ namespace TMSHomeworkUnitTests
         }
 
         [Theory]
-        [InlineData("Ma", "123456789", "123456789")]
-        [InlineData("Mark", "123456789", "123")]
-        [InlineData("Mark", "puzzle", "puzzle")]
-        [InlineData("Mark", "zzzzzzzz", "zzzzzzzz")]
+        [InlineData("Ma", "password", "password")]
+        [InlineData("Mark", "password", "password")]
+        [InlineData("Mark", "pass1", "pass1")]
         [InlineData("", "", "")]
         [InlineData(null, null, null)]
         [InlineData("ksjdfhksdfkhsdkfhskdjhf", "123456789", "123456789")]
@@ -29,16 +28,27 @@ namespace TMSHomeworkUnitTests
             Assert.False(result);
         }
 
-        [Fact]
-        public void ValidateLogin_ShouldWrongLoginExceptionThrows()
+        [Theory]
+        [InlineData("")]
+        [InlineData("Ma")]
+        [InlineData("Mark!")]
+        [InlineData(null)]
+        [InlineData("qiweyiuqwiyiqwvcyviqwvycviqwyi")]
+        public void ValidateLogin_ShouldWrongLoginExceptionThrows(string name)
         {
-            Assert.Throws<WrongLoginException>(() => InputValidator.ValidateLogin("Ma", InputValidator.LoginPattern));
+            Assert.Throws<WrongLoginException>(() => InputValidator.ValidateLogin(name));
         }
 
-        [Fact]
-        public void ValidatePassword_ShouldWrongPasswordExceptionThrows()
+        [Theory]
+        [InlineData("", "")]
+        [InlineData("password", "password")]
+        [InlineData("pass1", "pass1")]
+        [InlineData("password1", "pass1")]
+        [InlineData(null, null)]
+        [InlineData("qiweyiuqwiyiqwvcyviqwvycviqwyi", "password")]
+        public void ValidatePassword_ShouldWrongPasswordExceptionThrows(string password, string confirmPassword)
         {
-            Assert.Throws<WrongPasswordException>(() => InputValidator.ValidatePassword("password", "password", InputValidator.PasswordPattern));
+            Assert.Throws<WrongPasswordException>(() => InputValidator.ValidatePassword(password, confirmPassword));
         }
     }
 }

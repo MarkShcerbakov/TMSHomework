@@ -9,15 +9,15 @@ namespace TMSHomework
 {
     public class InputValidator
     {
-        public static readonly string LoginPattern = @"^\w{3,20}$";
-        public static readonly string PasswordPattern = @"^(?=.*(\d)).{6,20}$";
+        private static readonly string _loginPattern = @"^\w{3,20}$";
+        private static readonly string _passwordPattern = @"^(?=.*(\d)).{6,20}$";
 
         public static bool IsCorrectInput(string login, string password, string confirmPassword)
         {
             try
             {
-                ValidateLogin(login, LoginPattern);
-                ValidatePassword(password, confirmPassword, PasswordPattern);
+                ValidateLogin(login);
+                ValidatePassword(password, confirmPassword);
             }
             catch (WrongLoginException ex)
             {
@@ -38,17 +38,17 @@ namespace TMSHomework
             return true;
         }
 
-        public static void ValidateLogin(string input, string pattern)
+        public static void ValidateLogin(string input)
         {
-            if (!Regex.IsMatch(input, pattern))
+            if (input is null || !Regex.IsMatch(input, _loginPattern))
             {
                 throw new WrongLoginException("Некорректное имя пользователя!");
             }
         }
 
-        public static void ValidatePassword(string input, string confirmPassword, string pattern)
+        public static void ValidatePassword(string input, string confirmPassword)
         {
-            if (!Regex.IsMatch(input, pattern) || input != confirmPassword)
+            if (input is null || confirmPassword is null || !Regex.IsMatch(input, _passwordPattern) || input != confirmPassword)
             {
                 throw new WrongPasswordException("Некорректный пароль!");
             }
