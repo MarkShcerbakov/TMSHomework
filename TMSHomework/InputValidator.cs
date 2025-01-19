@@ -9,13 +9,6 @@ namespace TMSHomework
 {
     public class InputValidator
     {
-        private static readonly int _minLoginLength = 3;
-        private static readonly int _maxLoginLength = 19;
-        private static readonly int _minPasswordLength = 6;
-        private static readonly int _maxPasswordLength = 19;
-        private static readonly string _loginPattern = $@"^\w{{{_minLoginLength},{_maxLoginLength}}}$";
-        private static readonly string _passwordPattern = $@"^(?=.*\d).{{{_minPasswordLength},{_maxPasswordLength}}}$";
-
         public static bool IsCorrectInput(string login, string password, string confirmPassword)
         {
             try
@@ -44,7 +37,7 @@ namespace TMSHomework
 
         public static void ValidateLogin(string input)
         {
-            if (input is null || !Regex.IsMatch(input, _loginPattern))
+            if (input is null || !Regex.IsMatch(input, InputValidatorOptions.LoginPattern))
             {
                 throw new WrongLoginException("Некорректное имя пользователя!");
             }
@@ -52,7 +45,7 @@ namespace TMSHomework
 
         public static void ValidatePassword(string input, string confirmPassword)
         {
-            if (input is null || confirmPassword is null || !Regex.IsMatch(input, _passwordPattern) || input != confirmPassword)
+            if (input is null || confirmPassword is null || !Regex.IsMatch(input, InputValidatorOptions.PasswordPattern) || input != confirmPassword)
             {
                 throw new WrongPasswordException("Некорректный пароль!");
             }
