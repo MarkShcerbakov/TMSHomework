@@ -8,31 +8,26 @@ namespace TMSHomework
 {
     public class ExecutionManager
     {
-        private int _first;
-        private int _second;
-        private Dictionary<Operation, Func<int>> FuncExecute { get; set; }
+        public Dictionary<Operation, Func<int>> FuncExecute { get; set; }
+        private OperationManager _operationManager;
 
-        public ExecutionManager(int first, int second)
+        public ExecutionManager(OperationManager operationManager)
         {
-            _first = first;
-            _second = second;
-            FuncExecute = new()
-            {
-                [Operation.Addition] = Addition,
-                [Operation.Subtraction] = Substraction,
-                [Operation.Multiplication] = Multiply,
-                [Operation.Division] = Division
-            };
+            _operationManager = operationManager;
+            FuncExecute = new();
         }
 
-        public int Execute(Operation operation) => FuncExecute[operation]();
+        public void PopulateFunctions(Operation operation, Func<int> func)
+        {
+            FuncExecute.Add(operation, func);
+        }
 
-        private int Addition() => _first + _second;
-
-        private int Substraction() => _first - _second;
-
-        private int Multiply() => _first * _second;
-
-        private int Division() => _first / _second;
+        public void PrepareExecution()
+        {
+            PopulateFunctions(Operation.Addition, _operationManager.Addition);
+            PopulateFunctions(Operation.Subtraction, _operationManager.Subtraction);
+            PopulateFunctions(Operation.Multiplication, _operationManager.Multiplycation);
+            PopulateFunctions(Operation.Division, _operationManager.Division);
+        }
     }
 }

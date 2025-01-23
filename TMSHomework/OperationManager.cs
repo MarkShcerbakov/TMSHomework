@@ -10,48 +10,39 @@ namespace TMSHomework
     {
         private int _first;
         private int _second;
+        private ExecutionManager _executionManager;
 
         public OperationManager(int first, int second)
         {
             _first = first;
             _second = second;
+            _executionManager = new(this);
+            _executionManager.PrepareExecution();
         }
 
-        private int Sum()
+        public int Addition()
         {
             return _first + _second;
         }
 
-        private int Subtract()
+        public int Subtraction()
         {
             return _first - _second;
         }
 
-        private int Multiply()
+        public int Multiplycation()
         {
             return _first * _second;
         }
 
-        private int Divide()
+        public int Division()
         {
             return _first / _second;
         }
 
         public int Execute(Operation operation)
         {
-            switch (operation)
-            {
-                case Operation.Addition:
-                    return Sum();
-                case Operation.Subtraction:
-                    return Subtract();
-                case Operation.Multiplication:
-                    return Multiply();
-                case Operation.Division:
-                    return Divide();
-                default:
-                    return -1; //just to simulate
-            }
+            return _executionManager.FuncExecute[operation]();
         }
     }
 }
