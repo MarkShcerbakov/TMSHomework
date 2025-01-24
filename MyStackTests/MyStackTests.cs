@@ -4,49 +4,65 @@ namespace MyStackTests
 {
     public class MyStackTests
     {
-        public MyStack<int> Stack = new();
+        public MyStack<int> ValueTypeStack = new();
+        public MyStack<string> ReferenceTypeStack = new();
 
         [Fact]
         public void Push_Test()
         {
-            Stack.Push(1);
+            ValueTypeStack.Push(1);
+            ReferenceTypeStack.Push("1");
 
-            Assert.Equal(1, Stack.Peek());
+            Assert.Equal(1, ValueTypeStack.Peek());
+            Assert.Equal("1", ReferenceTypeStack.Peek());
         }
 
         [Fact]
         public void Pop()
         {
-            Stack.Push(1);
-            Stack.Push(2);
+            ValueTypeStack.Push(1);
+            ValueTypeStack.Push(2);
+            ReferenceTypeStack.Push("1");
+            ReferenceTypeStack.Push("2");
 
-            Assert.Equal(2, Stack.Pop());
-            Assert.Equal(1, Stack.Peek());
+            Assert.Equal(2, ValueTypeStack.Pop());
+            Assert.Equal(1, ValueTypeStack.Peek());
+            Assert.Equal("2", ReferenceTypeStack.Pop());
+            Assert.Equal("1", ReferenceTypeStack.Peek());
         }
 
         [Fact]
         public void Peek()
         {
-            Stack.Push(1);
-            Stack.Push(2);
+            ValueTypeStack.Push(1);
+            ValueTypeStack.Push(2);
+            ReferenceTypeStack.Push("1");
+            ReferenceTypeStack.Push("2");
 
-            Assert.Equal(2, Stack.Peek());
+            Assert.Equal(2, ValueTypeStack.Peek());
+            Assert.Equal("2", ReferenceTypeStack.Peek());
         }
 
         [Fact]
         public void Pop_ShouldEmptyStackExceptionThrows()
         {
-            Stack.Push(1);
-            Stack.Pop();
-            Assert.Throws<EmptyStackException>(() => Stack.Pop());
+            ValueTypeStack.Push(1);
+            ValueTypeStack.Pop();
+            ReferenceTypeStack.Push("1");
+            ReferenceTypeStack.Pop();
+            Assert.Throws<EmptyStackException>(() => ValueTypeStack.Pop());
+            Assert.Throws<EmptyStackException>(() => ReferenceTypeStack.Pop());
         }
 
         [Fact]
         public void Peek_ShouldEmptyStackExceptionThrows()
         {
-            Stack.Push(1);
-            Stack.Pop();
-            Assert.Throws<EmptyStackException>(() => Stack.Peek());
+            ValueTypeStack.Push(1);
+            ValueTypeStack.Pop();
+            ReferenceTypeStack.Push("1");
+            ReferenceTypeStack.Pop();
+            Assert.Throws<EmptyStackException>(() => ValueTypeStack.Peek());
+            Assert.Throws<EmptyStackException>(() => ReferenceTypeStack.Peek());
         }
     }
 }
