@@ -50,6 +50,7 @@ namespace MyStackTests
             ValueTypeStack.Pop();
             ReferenceTypeStack.Push("1");
             ReferenceTypeStack.Pop();
+
             Assert.Throws<EmptyStackException>(() => ValueTypeStack.Pop());
             Assert.Throws<EmptyStackException>(() => ReferenceTypeStack.Pop());
         }
@@ -61,6 +62,7 @@ namespace MyStackTests
             ValueTypeStack.Pop();
             ReferenceTypeStack.Push("1");
             ReferenceTypeStack.Pop();
+
             Assert.Throws<EmptyStackException>(() => ValueTypeStack.Peek());
             Assert.Throws<EmptyStackException>(() => ReferenceTypeStack.Peek());
         }
