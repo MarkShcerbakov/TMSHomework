@@ -15,14 +15,14 @@ namespace TMSHomework
                 filePath = null;
                 return false;
             }
-            DirectoryInfo dir = new(dirPath);
-            if (dir.Exists)
+
+            if (Directory.Exists(dirPath))
             {
-                var files = dir.GetFiles().Where(file => file.Name.EndsWith("json", StringComparison.OrdinalIgnoreCase)
-                    && file.Name.Contains(textInFileName, StringComparison.OrdinalIgnoreCase));
+                var files = Directory.GetFiles(dirPath, "*.json", SearchOption.TopDirectoryOnly)
+                    .Where(fileName => fileName.Contains(textInFileName, StringComparison.OrdinalIgnoreCase));
                 if (files.Any())
                 {
-                    filePath = files.First().FullName;
+                    filePath = files.First();
                     return true;
                 }
             }
